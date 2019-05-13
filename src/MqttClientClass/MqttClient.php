@@ -39,13 +39,13 @@ class MqttClient
 
     public function __construct()
     {
-        $this->host = config('mqtt.host');
-        $this->clientId = config('mqtt.clientId');
-        $this->username = config('mqtt.username');
-        $this->password = config('mqtt.password');
-        $this->cert_file = config('mqtt.certfile');
-        $this->port = config('mqtt.port');
-        $this->debug = config('mqtt.debug');
+        $this->host = config('mqttclient.host');
+        $this->clientId = config('mqttclient.clientId');
+        $this->username = config('mqttclient.username');
+        $this->password = config('mqttclient.password');
+        $this->cert_file = config('mqttclient.certfile');
+        $this->port = config('mqttclient.port');
+        $this->debug = config('mqttclient.debug');
 
     }
 
