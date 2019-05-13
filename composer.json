@@ -1,7 +1,7 @@
 {
     "name": "denherrring/laravel-mqtt-client",
     "description": "A simple Laravel 5 Library / Client to connect/publish to MQTT broker",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "type": "library",
     "license": "MIT",
     "authors": [
