@@ -8,9 +8,9 @@ class MqttClientServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__.'/config/mqtt.php','mqtt');
+        $this->mergeConfigFrom(__DIR__.'/config/mqttclient.php','mqtt');
         $this->publishes([
-            __DIR__.'/config/mqtt.php' => config_path('mqtt.php'),
+            __DIR__.'/config/mqttclient.php' => config_path('mqttclient.php'),
         ]);
     }
     public function register()
