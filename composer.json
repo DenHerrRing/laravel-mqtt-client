@@ -1,0 +1,47 @@
+{
+    "name": "denherrring/laravel-mqtt-client",
+    "description": "A simple Laravel 5 Library / Client to connect/publish to MQTT broker",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dennis Hering",
+            "email": "dennis@hering.me"
+        }
+    ],
+    "keywords": [
+        "laravel",
+        "laravel5",
+        "mqtt-laravel",
+        "mqtt-laravel-publisher",
+        "mqtt-laravel-subscriber",
+        "laravel mqtt library",
+        "laravel-mqtt",
+        "laravel mqtt",
+        "mqtt laravel"
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "laravel/framework": ">=5.6"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "DenHerrRing\\MqttClient\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DenHerrRing\\MqttClient\\MqttClientServiceProvider"
+            ],
+            "aliases": {
+                "Mqtt": "DenHerrRing\\MqttClient\\Facades\\MqttClient"
+            }
+        }
+    }
+}
