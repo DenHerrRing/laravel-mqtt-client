@@ -25,51 +25,102 @@ namespace DenHerrRing\MqttClient\MqttClientClass;
 
 */
 
-
+/**
+ * MqttClient
+ */
 class MqttClient
 {
     protected $client;
-    protected $clientId;
+    protected $clientId = null;
     protected $host = null;
     protected $username = null;
-    protected $cert_file = null;
+    protected $certFile = null;
+    protected $protocol = null;
     protected $password = null;
     protected $port = null;
     protected $debug = null;
+    private $isConnected = false;
 
     public function __construct()
     {
         $this->host = config('mqttclient.host');
         $this->clientId = config('mqttclient.clientId');
+        if ($this->clientId) { // If no ID is set, generate random ID
+            $this->clientId = "laravelMqttClient-".rand(1,100)*100;
+        }
         $this->username = config('mqttclient.username');
         $this->password = config('mqttclient.password');
         $this->cert_file = config('mqttclient.certfile');
+        $this->protocol = config('mqttclient.protocol');
         $this->port = config('mqttclient.port');
         $this->debug = config('mqttclient.debug');
-
+        $this->client = new MqttClientService($this->host, $this->port, $this->protocol);
     }
 
-
-    public function ConnectAndPublish($topic, $msg, $will = NULL)
+    /**
+     * Connect to Broker
+     */
+    public function Connect()
     {
-        if ($this->clientId === NULL) {
-            $clientId = "mqttClient-" . rand(0, 100);
-        } else {
-            $clientId = $this->clientId;
+        $this->client = new MqttClientService($this->host, $this->port, $this->protocol);
+        if ($this->certFile) {
+            $this->client->setEncryption($this->certFile);
         }
 
-        $client = new MqttClientService($this->host, $this->port, $clientId, $this->debug, $this->cert_file);
+        if ($this->username && $this->password) {
+            $this->client->setAuthentication($this->username, $this->password);
+        }
+        $this->isConnected = $this->client->sendConnect($this->clientId);
+    }
 
-        if ($client->connect(true, $will, $this->username, $this->password)) {
-            $client->publish($topic, $msg);
-            $client->close();
+    /**
+     * Publish message for given topic
+     *
+     * @param string $topic
+     * @param string $msg
+     * @return boolean Returns true if message was send
+     */
+    public function Publish($topic, $msg)
+    {
+        if ($this->isConnected) {
+            $this->client->sendPublish($topic, $msg);
 
             return true;
         }
+        $this->client->close(); // On Error Close Connection
 
         return false;
-
     }
 
+    /**
+     * Set will (last message defined by MQTT) to send when connection is lost
+     *
+     * @param string $willTopic
+     * @param string $willMessage
+     * @param integer $qos
+     * @param boolean $retain
+     */
+    public function setWill($willTopic, $willMessage, $qos=1, $retain=false)
+    {
+        $this->client->setWill($willTopic, $willMessage, $qos, $retain);
+    }
+
+    /**
+     * Disconnect from Broker
+     */
+    public function Disconnect()
+    {
+        $this->client->sendDisconnect();
+        $this->client->close();
+    }
+
+    /**
+     * Set Debug of Client
+     * @param boolean $debug
+     */
+    public function debug($debug)
+    {
+        $this->client->setDebug($debug);
+    }
 
 }

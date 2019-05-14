@@ -57,7 +57,7 @@ use DenHerrRing\MqttClient\MqttClientClass\MqttClient;
 
 public function SendMsgViaMqtt($topic, $message)
 {
-        $mqtt = new Mqtt();
+        $mqtt = new MqttClient();
         $output = $mqtt->ConnectAndPublish($topic, $message);
 
         if ($output === true)
